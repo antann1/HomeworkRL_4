@@ -17,6 +17,8 @@ find_package(urdf REQUIRED)
 find_package(xacro REQUIRED)
 find_package(tf2 REQUIRED)
 find_package(tf2_ros REQUIRED)
+find_package(tf2_geometry_msgs REQUIRED)
+
 
 add_executable(dynamic_tf_publisher src/odom_bl_tf.cpp)
 ament_target_dependencies(dynamic_tf_publisher rclcpp nav_msgs geometry_msgs tf2 tf2_ros)
@@ -24,11 +26,15 @@ ament_target_dependencies(dynamic_tf_publisher rclcpp nav_msgs geometry_msgs tf2
 add_executable(aruco_tf_publisher src/aruco_tf_broadcaster.cpp)
 ament_target_dependencies(aruco_tf_publisher rclcpp nav_msgs geometry_msgs tf2 tf2_ros)
 
+add_executable(aruco_to_map src/aruco_to_map.cpp)
+ament_target_dependencies(aruco_to_map rclcpp nav_msgs geometry_msgs tf2 tf2_ros tf2_geometry_msgs)
+
+
 # Installa i file necessari
 install(DIRECTORY launch urdf models meshes worlds config src maps scripts
   DESTINATION share/${PROJECT_NAME}
 )
-install(TARGETS dynamic_tf_publisher aruco_tf_publisher
+install(TARGETS dynamic_tf_publisher aruco_tf_publisher aruco_to_map
   DESTINATION lib/${PROJECT_NAME}
 )
 # Install Python executables
@@ -36,6 +42,7 @@ install(PROGRAMS
   scripts/reach_goal.py
   scripts/follow_waypoints.py
   scripts/vision_based_navigation.py
+  scripts/go_to_aruco.py
   DESTINATION lib/${PROJECT_NAME}
 )
 
